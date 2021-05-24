@@ -1,0 +1,32 @@
+-- Sozdaem BD
+CREATE DATABASE TK;
+-- Sozdaem tablitsi v BD
+CREATE TABLE SoldThings(                                  -- sozdaem tablitsuу SoldThings prodaem veschi
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,       -- pervichniy kluch, ne mozhet bit neopreodelennim 
+ 	dataSell date,                                    -- pole data prodazhi
+	HM_SellThings int, 			          -- kol-vo prodannogo tovara
+	Cost1ye decimal(5,2)				  -- stoimost za ed.tovara
+);
+
+CREATE TABLE Sellers(					  -- sozdaem tablitsu Sellers prodavtsi 	
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,	  -- pervichnyy kluch,ne mozhet bit neopredelennim
+	idSeller INT NOT NULL ,
+	NameSeller varchar(30),				  -- Familia prodavtsa
+	FOREIGN KEY(idSeller) REFERENCES SoldThings(id)   -- vneshniy kluch SoldThings
+        ON DELETE CASCADE				  -- udalenie i obnovlemie kaskadno	
+        ON UPDATE CASCADE
+);	
+	
+CREATE TABLE Things(					  -- sozdaem tablitsu 
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,  	  -- pervichniy kluch 
+	idThing INT NOT NULL ,				  -- id tovara 	
+	NameThing varchar(30),				  -- naimenovanie tovara	
+	Kateg varchar2(10), 				  -- kategoriya tovara
+	FOREIGN KEY(idThing) REFERENCES SoldThings(id)	  -- vneshniy kluch na glavnuyu tablitsu
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);	
+
+INSERT INTO SoldThings(id, dataSell, HM_SellThings, Cost1ye) VALUE (1,'2020-11-22',2,300.00);
+INSERT INTO Sellers(id,idSeller,NameSaller) VALUE (1,1,Petrov);
+INSERT INTO Things(id,idThing,NameThing,Kateg) VALUE (1,1,'sausage','meat products');
