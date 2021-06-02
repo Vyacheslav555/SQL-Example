@@ -5,7 +5,8 @@ CREATE TABLE SoldThings(                                  -- создаем та
 	id INT NOT NULL PRIMARY KEY,                      -- первичный ключ, не может быть неопределим 
  	dataSell date,                                    -- поле дата продажи
 	HM_SellThings int, 			          -- количество проданного товара
-	Cost1ye decimal(5,2)				  -- стоимость за ед.товара
+	Cost1ye decimal(5,2),			  -- стоимость за ед.товара
+	ON UPDATE CASCADE
 );
 CREATE SEQUANCE id.SoldThings minvalue 1 start with 1 cache 100; -- создаем последовательность на первичный ключ(инкрементация)
 
@@ -13,23 +14,31 @@ CREATE TABLE Sellers(					  -- создаем таблицу Sellers прода�
 	id INT NOT NULL PRIMARY KEY,	                  -- первичный ключ,не может быть неопределим 
 	idSeller INT NOT NULL ,
 	NameSeller varchar(30),				  -- Фамилия продавца
-	FOREIGN KEY(idSeller) REFERENCES SoldThings(id)   -- внешний ключ SoldThings
+	FOREIGN KEY(idSeller) REFERENCES SoldThings(id),  -- внешний ключ SoldThings
         ON UPDATE CASCADE
 );	
 CREATE SEQUANCE id.Sellers minvalue 1 start with 1 cache 100; -- создаем последовательность на первичный ключ(инкрементация)
 
 
-CREATE TABLE Things(					  -- создаем таблицу
+CREATE TABLE Things(					  -- создаем таблицу Вещи или товары
 	id INT NOT NULL PRIMARY KEY,  	                  -- первичный ключ
 	idThing INT NOT NULL ,				  -- id товара 	
 	NameThing varchar(30),				  -- наименованеи товара
-	idKateg INT NOT NULL, 				  -- id категория товара
-	FOREIGN KEY(idThing) REFERENCES SoldThings(id)	  -- внешний ключ на таблицу проданных товаров
+	idCateg INT NOT NULL, 				  -- id категория товара
+	FOREIGN KEY(idThing) REFERENCES SoldThings(id),	  -- внешний ключ на таблицу проданных товаров
+	FOREIGN KEY(idCateg) REFERENCES Categories(idCateg),-- внешний ключ на таблицу категорий
         ON UPDATE CASCADE
 );	
 CREATE SEQUANCE id.Things minvalue 1 start with 1 cache 100; -- создаем последовательность на первичный ключ(инкрементация)
 
+CREATE TABLE Categories(				  -- создаем таблицу категории
+	idCateg INT NOT NULL PRIMARY KEY,                 -- первичный ключ таблицы
+	NameCateg varchar(30),				  -- наименование категорий
+	ON UPDATE CASCADE
+);
+CREATE SEQUANCE idCateg.Categories minvalue 1 start with 1 cache 100; -- создаем последовательность на первичный ключ(инкрементация)
 
 INSERT INTO SoldThings(id, dataSell, HM_SellThings, Cost1ye) VALUE (1,'2020-11-22',2,300.00);
 INSERT INTO Sellers(id,idSeller,NameSaller) VALUE (1,1,Petrov);
-INSERT INTO Things(id,idThing,NameThing,Kateg) VALUE (1,1,'sausage','meat products');
+INSERT INTO Things(id,idThing,NameThing,idCateg) VALUE (1,1,'sausage',1);
+INSERT INTO Categories(idCateg,NameCateg) VALUE (1,'Молочная продукция');
