@@ -1,31 +1,34 @@
 -- Sozdaem BD
 CREATE DATABASE TK;
 -- Sozdaem tablitsi v BD
-CREATE TABLE SoldThings(                                  -- sozdaem tablitsuу SoldThings prodaem veschi
-	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,       -- pervichniy kluch, ne mozhet bit neopreodelennim 
- 	dataSell date,                                    -- pole data prodazhi
-	HM_SellThings int, 			          -- kol-vo prodannogo tovara
-	Cost1ye decimal(5,2)				  -- stoimost za ed.tovara
+CREATE TABLE SoldThings(                                  -- создаем таблицу SoldThings продаем вещи
+	id INT NOT NULL PRIMARY KEY,                      -- первичный ключ, не может быть неопределим 
+ 	dataSell date,                                    -- поле дата продажи
+	HM_SellThings int, 			          -- количество проданного товара
+	Cost1ye decimal(5,2)				  -- стоимость за ед.товара
 );
+CREATE SEQUANCE id.SoldThings minvalue 1 start with 1 cache 100; -- создаем последовательность на первичный ключ(инкрементация)
 
-CREATE TABLE Sellers(					  -- sozdaem tablitsu Sellers prodavtsi 	
-	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,	  -- pervichnyy kluch,ne mozhet bit neopredelennim
+CREATE TABLE Sellers(					  -- создаем таблицу Sellers продавцы
+	id INT NOT NULL PRIMARY KEY,	                  -- первичный ключ,не может быть неопределим 
 	idSeller INT NOT NULL ,
-	NameSeller varchar(30),				  -- Familia prodavtsa
-	FOREIGN KEY(idSeller) REFERENCES SoldThings(id)   -- vneshniy kluch SoldThings
-        ON DELETE CASCADE				  -- udalenie i obnovlemie kaskadno	
+	NameSeller varchar(30),				  -- Фамилия продавца
+	FOREIGN KEY(idSeller) REFERENCES SoldThings(id)   -- внешний ключ SoldThings
         ON UPDATE CASCADE
 );	
-	
-CREATE TABLE Things(					  -- sozdaem tablitsu 
-	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,  	  -- pervichniy kluch 
-	idThing INT NOT NULL ,				  -- id tovara 	
-	NameThing varchar(30),				  -- naimenovanie tovara	
-	Kateg varchar2(10), 				  -- kategoriya tovara
-	FOREIGN KEY(idThing) REFERENCES SoldThings(id)	  -- vneshniy kluch na glavnuyu tablitsu
-        ON DELETE CASCADE
+CREATE SEQUANCE id.Sellers minvalue 1 start with 1 cache 100; -- создаем последовательность на первичный ключ(инкрементация)
+
+
+CREATE TABLE Things(					  -- создаем таблицу
+	id INT NOT NULL PRIMARY KEY,  	                  -- первичный ключ
+	idThing INT NOT NULL ,				  -- id товара 	
+	NameThing varchar(30),				  -- наименованеи товара
+	idKateg INT NOT NULL, 				  -- id категория товара
+	FOREIGN KEY(idThing) REFERENCES SoldThings(id)	  -- внешний ключ на таблицу проданных товаров
         ON UPDATE CASCADE
 );	
+CREATE SEQUANCE id.Things minvalue 1 start with 1 cache 100; -- создаем последовательность на первичный ключ(инкрементация)
+
 
 INSERT INTO SoldThings(id, dataSell, HM_SellThings, Cost1ye) VALUE (1,'2020-11-22',2,300.00);
 INSERT INTO Sellers(id,idSeller,NameSaller) VALUE (1,1,Petrov);
