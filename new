@@ -3,9 +3,11 @@ CREATE DATABASE TK;
 -- Sozdaem tablitsi v BD
 CREATE TABLE SoldThings(                                  -- создаем таблицу SoldThings продаем вещи
 	id INT NOT NULL PRIMARY KEY,                      -- первичный ключ, не может быть неопределим 
- 	dataSell date,                                    -- поле дата продажи
+	dataSell date,                                    -- поле дата продажи
 	HM_SellThings int, 			          -- количество проданного товара
-	Cost1ye decimal(5,2),			  -- стоимость за ед.товара
+	Cost1ye decimal(5,2),         			  -- стоимость за ед.товара
+	idThing INT NOT NULL,
+	FOREIGN KEY(idThing) REFERENCES Things(idThing),
 	ON UPDATE CASCADE
 );
 CREATE SEQUANCE id.SoldThings minvalue 1 start with 1 cache 100; -- создаем последовательность на первичный ключ(инкрементация)
@@ -21,15 +23,13 @@ CREATE SEQUANCE id.Sellers minvalue 1 start with 1 cache 100; -- создаем 
 
 
 CREATE TABLE Things(					  -- создаем таблицу Вещи или товары
-	id INT NOT NULL PRIMARY KEY,  	                  -- первичный ключ
-	idThing INT NOT NULL ,				  -- id товара 	
+	idThing INT NOT NULL PRIMARY KEY,	          -- id товара, первичный ключ
 	NameThing varchar(30),				  -- наименованеи товара
 	idCateg INT NOT NULL, 				  -- id категория товара
-	FOREIGN KEY(idThing) REFERENCES SoldThings(id),	  -- внешний ключ на таблицу проданных товаров
 	FOREIGN KEY(idCateg) REFERENCES Categories(idCateg),-- внешний ключ на таблицу категорий
         ON UPDATE CASCADE
 );	
-CREATE SEQUANCE id.Things minvalue 1 start with 1 cache 100; -- создаем последовательность на первичный ключ(инкрементация)
+CREATE SEQUANCE idThing.Things minvalue 1 start with 1 cache 100; -- создаем последовательность на первичный ключ(инкрементация)
 
 CREATE TABLE Categories(				  -- создаем таблицу категории
 	idCateg INT NOT NULL PRIMARY KEY,                 -- первичный ключ таблицы
@@ -38,7 +38,10 @@ CREATE TABLE Categories(				  -- создаем таблицу категори�
 );
 CREATE SEQUANCE idCateg.Categories minvalue 1 start with 1 cache 100; -- создаем последовательность на первичный ключ(инкрементация)
 
-INSERT INTO SoldThings(id, dataSell, HM_SellThings, Cost1ye) VALUE (1,'2020-11-22',2,300.00);
+INSERT INTO SoldThings(id, dataSell, HM_SellThings, Cost1ye) VALUE (1,'2020-11-22',2,300.00,1);
 INSERT INTO Sellers(id,idSeller,NameSaller) VALUE (1,1,Petrov);
-INSERT INTO Things(id,idThing,NameThing,idCateg) VALUE (1,1,'sausage',1);
-INSERT INTO Categories(idCateg,NameCateg) VALUE (1,'Молочная продукция');
+INSERT INTO Things(idThing,NameThing,idCateg) VALUE (1,'sausage',1);
+INSERT INTO Categories(idCateg,NameCateg) VALUE (1,'Milk product');
+
+SELECT NameCateg, SUM( from Categories
+where
