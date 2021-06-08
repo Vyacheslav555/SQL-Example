@@ -43,5 +43,7 @@ INSERT INTO Sellers(id,idSeller,NameSaller) VALUE (1,1,Petrov);
 INSERT INTO Things(idThing,NameThing,idCateg) VALUE (1,'sausage',1);
 INSERT INTO Categories(idCateg,NameCateg) VALUE (1,'Milk product');
 
-SELECT NameCateg, SUM( from Categories
+SELECT NameCateg.Categories as Name, SUM(HM_SellThings.SoldThings) over(partitional by NameCateg.Categories) as QSold, 
+SUM(Cost1ye.SoldThings) over(partionanal by NameCateg.Categories) as SumSold,
+from SoldThings,Categories,Things
 where
