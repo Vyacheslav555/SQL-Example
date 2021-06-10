@@ -53,7 +53,10 @@ INSERT INTO SoldThings(id, idSeller, dataSell, HM_SellThings, Cost1ye, idThing) 
 INSERT INTO SoldThings(id, idSeller, dataSell, HM_SellThings, Cost1ye, idThing) VALUE (8,3,'2021-06-09',4,200.00,8);
 INSERT INTO SoldThings(id, idSeller, dataSell, HM_SellThings, Cost1ye, idThing) VALUE (9,3,'2021-06-01',6,220.00,9);
 
+--надо выбрать все категории с общем количеством продаж по ним и общем стоимостью проданных товаров
 select NameCateg, SUM(HM_SellThings) over(partition by NameCateg) as QSell, Cost1ye from Categories,SoldThings
 order by NameCateg
 
+--надо выбрать продажи за последние 5 дней которые относятся к топ5 категориям товаров с ФИО продавца + добавить рейтинг продавца по объему продаж
+select 
 
