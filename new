@@ -1,49 +1,55 @@
--- Sozdaem BD
 CREATE DATABASE TK;
 -- Sozdaem tablitsi v BD
+CREATE TABLE Categories(				  -- создаем таблицу категории
+	idCateg INT NOT NULL PRIMARY KEY,                 -- первичный ключ таблицы
+	NameCateg varchar(30)				  -- наименование категорий
+);
+--CREATE SEQUANCE idCateg.Categories minvalue 1 start with 1 cache 100; -- создаем последовательность на первичный ключ(инкрементация)
+CREATE TABLE Things(					  -- создаем таблицу Вещи или товары
+	idThing INT NOT NULL PRIMARY KEY,	          -- id товара, первичный ключ
+	NameThing varchar(30),				  -- наименованеи товара
+	idCateg INT NOT NULL, 				  -- id категория товара
+	FOREIGN KEY(idCateg) REFERENCES Categories(idCateg)-- внешний ключ на таблицу категорий
+);	
+--CREATE SEQUANCE idThing.Things minvalue 1 start with 1 cache 100; -- создаем последовательность на первичный ключ(инкрементация)
+CREATE TABLE Sellers(					  -- создаем таблицу Sellers продавцы
+	idSeller INT NOT NULL PRIMARY KEY,
+	NameSeller varchar(30)				  -- Фамилия продавца
+);	
+--CREATE SEQUANCE idSeller.Sellers minvalue 1 start with 1 cache 100; -- создаем последовательность на первичный ключ(инкрементация)
 CREATE TABLE SoldThings(                                  -- создаем таблицу SoldThings продаем вещи
 	id INT NOT NULL PRIMARY KEY,                      -- первичный ключ, не может быть неопределим 
+    idSeller INT NOT NULL,
 	dataSell date,                                    -- поле дата продажи
 	HM_SellThings int, 			          -- количество проданного товара
 	Cost1ye decimal(5,2),         			  -- стоимость за ед.товара
 	idThing INT NOT NULL,
 	FOREIGN KEY(idThing) REFERENCES Things(idThing),
-	ON UPDATE CASCADE
+    FOREIGN KEY(idSeller) REFERENCES Sellers(idSeller)
 );
-CREATE SEQUANCE id.SoldThings minvalue 1 start with 1 cache 100; -- создаем последовательность на первичный ключ(инкрементация)
-
-CREATE TABLE Sellers(					  -- создаем таблицу Sellers продавцы
-	id INT NOT NULL PRIMARY KEY,	                  -- первичный ключ,не может быть неопределим 
-	idSeller INT NOT NULL ,
-	NameSeller varchar(30),				  -- Фамилия продавца
-	FOREIGN KEY(idSeller) REFERENCES SoldThings(id),  -- внешний ключ SoldThings
-        ON UPDATE CASCADE
-);	
-CREATE SEQUANCE id.Sellers minvalue 1 start with 1 cache 100; -- создаем последовательность на первичный ключ(инкрементация)
-
-
-CREATE TABLE Things(					  -- создаем таблицу Вещи или товары
-	idThing INT NOT NULL PRIMARY KEY,	          -- id товара, первичный ключ
-	NameThing varchar(30),				  -- наименованеи товара
-	idCateg INT NOT NULL, 				  -- id категория товара
-	FOREIGN KEY(idCateg) REFERENCES Categories(idCateg),-- внешний ключ на таблицу категорий
-        ON UPDATE CASCADE
-);	
-CREATE SEQUANCE idThing.Things minvalue 1 start with 1 cache 100; -- создаем последовательность на первичный ключ(инкрементация)
-
-CREATE TABLE Categories(				  -- создаем таблицу категории
-	idCateg INT NOT NULL PRIMARY KEY,                 -- первичный ключ таблицы
-	NameCateg varchar(30),				  -- наименование категорий
-	ON UPDATE CASCADE
-);
-CREATE SEQUANCE idCateg.Categories minvalue 1 start with 1 cache 100; -- создаем последовательность на первичный ключ(инкрементация)
-
-INSERT INTO SoldThings(id, dataSell, HM_SellThings, Cost1ye) VALUE (1,'2020-11-22',2,300.00,1);
-INSERT INTO Sellers(id,idSeller,NameSaller) VALUE (1,1,Petrov);
-INSERT INTO Things(idThing,NameThing,idCateg) VALUE (1,'sausage',1);
+--CREATE SEQUANCE id.SoldThings minvalue 1 start with 1 cache 100; -- создаем последовательность на первичный ключ(инкрементация)
 INSERT INTO Categories(idCateg,NameCateg) VALUE (1,'Milk product');
+INSERT INTO Categories(idCateg,NameCateg) VALUE (2,'Meat product');
+INSERT INTO Categories(idCateg,NameCateg) VALUE (3,'Сonfectionery');
+INSERT INTO Things(idThing,NameThing,idCateg) VALUE (1,'Milk',1);
+INSERT INTO Things(idThing,NameThing,idCateg) VALUE (2,'Cream',1);
+INSERT INTO Things(idThing,NameThing,idCateg) VALUE (3,'Cheese',1);
+INSERT INTO Things(idThing,NameThing,idCateg) VALUE (4,'Meat',2);
+INSERT INTO Things(idThing,NameThing,idCateg) VALUE (5,'Sausage',2);
+INSERT INTO Things(idThing,NameThing,idCateg) VALUE (6,'chicken thigh',2);
+INSERT INTO Things(idThing,NameThing,idCateg) VALUE (7,'cake',3);
+INSERT INTO Things(idThing,NameThing,idCateg) VALUE (8,'pie',3);
+INSERT INTO Things(idThing,NameThing,idCateg) VALUE (9,'cheesecake',3);
+INSERT INTO Sellers(idSeller, NameSeller) VALUE (1,'Petrov');
+INSERT INTO Sellers(idSeller, NameSeller) VALUE (2,'Ivanov');
+INSERT INTO Sellers(idSeller, NameSeller) VALUE (3,'Sidorov');
+INSERT INTO SoldThings(id, idSeller, dataSell, HM_SellThings, Cost1ye, idThing) VALUE (1,1,'2021-06-08',3,86.00,1);
+INSERT INTO SoldThings(id, idSeller, dataSell, HM_SellThings, Cost1ye, idThing) VALUE (2,1,'2021-06-07',2,30.00,2);
+INSERT INTO SoldThings(id, idSeller, dataSell, HM_SellThings, Cost1ye, idThing) VALUE (3,1,'2021-06-08',1,120.00,3);
+INSERT INTO SoldThings(id, idSeller, dataSell, HM_SellThings, Cost1ye, idThing) VALUE (4,2,'2021-06-07',4,300.00,4);
+INSERT INTO SoldThings(id, idSeller, dataSell, HM_SellThings, Cost1ye, idThing) VALUE (5,2,'2021-06-08',5,160.00,5);
+INSERT INTO SoldThings(id, idSeller, dataSell, HM_SellThings, Cost1ye, idThing) VALUE (6,2,'2021-11-22',6,180.00,6);
+INSERT INTO SoldThings(id, idSeller, dataSell, HM_SellThings, Cost1ye, idThing) VALUE (7,3,'2021-06-03',2,50.00,7);
+INSERT INTO SoldThings(id, idSeller, dataSell, HM_SellThings, Cost1ye, idThing) VALUE (8,3,'2021-06-09',4,200.00,8);
+INSERT INTO SoldThings(id, idSeller, dataSell, HM_SellThings, Cost1ye, idThing) VALUE (9,3,'2021-06-01',6,220.00,9);
 
-SELECT NameCateg.Categories as Name, SUM(HM_SellThings.SoldThings) over(partitional by NameCateg.Categories) as QSold, 
-SUM(Cost1ye.SoldThings) over(partionanal by NameCateg.Categories) as SumSold,
-from SoldThings,Categories,Things
-where
