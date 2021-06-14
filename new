@@ -60,5 +60,6 @@ cross join SoldThings cross join Things on Things.idThing = SoldThings.idThing  
 --надо выбрать продажи за последние 5 дней которые относятся к топ5 категориям товаров с ФИО продавца + добавить рейтинг продавца по объему продаж
 select NameThing, NameCateg, dataSell, NameSeller from SoldThings, Sellers, Categories, Things 
 where Sellers.idSeller = SoldThings.idSeller and Things.idCateg = Categories.idCateg  and Things.idThing = SoldThings.idThing and DATEDIFF(CURDATE(), dataSell) <= 5
+order by HM_SellThings*Cost1ye DESC
 
 --рейтинг продавцов по объему продаж
