@@ -58,7 +58,7 @@ select DISTINCT NameCateg, SUM(HM_SellThings) over(partition by NameCateg) as QS
 cross join SoldThings cross join Things on Things.idThing = SoldThings.idThing  and Categories.idCateg = Things.idCateg
 
 --надо выбрать продажи за последние 5 дней которые относятся к топ5 категориям товаров с ФИО продавца + добавить рейтинг продавца по объему продаж
-select NameThing, dataSell, NameSeller from SoldThings, Sellers, Things 
-where Sellers.idSeller = SoldThings.idSeller and Things.idThing = SoldThings.idThing
+select NameThing, NameCateg, dataSell, NameSeller from SoldThings, Sellers, Categories, Things 
+where Sellers.idSeller = SoldThings.idSeller and Things.idThing = SoldThings.idThing and DATEDIFF(CURDATE(), dataSell) <= 5
 
 --рейтинг продавцов по объему продаж
