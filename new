@@ -54,15 +54,15 @@ INSERT INTO SoldThings(id, idSeller, dataSell, HM_SellThings, Cost1ye, idThing) 
 INSERT INTO SoldThings(id, idSeller, dataSell, HM_SellThings, Cost1ye, idThing) VALUE (9,3,'2021-06-01',6,220.00,9);
 
 --надо выбрать все категории с общем количеством продаж по ним и общем стоимостью проданных товаров
-select DISTINCT NameCateg, SUM(HM_SellThings) over(partition by NameCateg) as QSell, SUM(Cost1ye) over(partition by NameCateg) from Categories
-cross join SoldThings cross join Things on Things.idThing = SoldThings.idThing  and Categories.idCateg = Things.idCateg
---ex2:
-select DISTINCT NameCateg, SUM(HM_SellThings) over(partition by NameCateg) as QSell, SUM(Cost1ye) over(partition by NameCateg) as ASumSThing from Categories, SoldThings, Things 
+select DISTINCT NameCateg, SUM(HM_SellThings) over(partition by NameCateg) as QSell, 
+SUM(Cost1ye) over(partition by NameCateg) as ASumSThing from Categories, SoldThings, Things 
 where Things.idThing = SoldThings.idThing  and Categories.idCateg = Things.idCateg
 
 --надо выбрать продажи за последние 5 дней которые относятся к топ5 категориям товаров с ФИО продавца + добавить рейтинг продавца по объему продаж
-select NameThing, NameCateg, dataSell, NameSeller from SoldThings, Sellers, Categories, Things 
-where Sellers.idSeller = SoldThings.idSeller and Things.idCateg = Categories.idCateg  and Things.idThing = SoldThings.idThing and DATEDIFF(CURDATE(), dataSell) <= 5
-order by HM_SellThings*Cost1ye DESC
+select NameThing, NameCateg, dataSell, NameSeller from SoldThings, Sellers, Categories, Things
+where Sellers.idSeller = SoldThings.idSeller and Things.idCateg = Categories.idCateg  and Things.idThing = SoldThings.idThing and DATEDIFF(CURDATE(), dataSell) <= 5 in(
+select NameCateg from Categories,Things,SoldThings where Categories.idCateg=Things.idCateg and Things.idThing=SoldThings.idThing
+order by SoldThings.Cost1ye * SoldThings.HM_SellThings DESC
+)
 
---рейтинг продавцов по объему продаж
+
