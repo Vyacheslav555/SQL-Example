@@ -83,4 +83,3 @@ where DATEDIFF(CURDATE(),dataSell)<=5
 group by NameCateg
 order by allsold DESC
 limit 5
-
