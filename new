@@ -60,7 +60,7 @@ SUM(Cost1ye) over(partition by NameCateg) as ASumSThing from Categories, SoldThi
 where Things.idThing = SoldThings.idThing  and Categories.idCateg = Things.idCateg
 
 ex2(last select):
-select DISTINCT NameCateg, SUM(HM_SellThings*Cost1ye) over(partition by NameThing) from SoldThings 
+select DISTINCT NameCateg, SUM(HM_SellThings*Cost1ye) over(partition by NameCateg) from SoldThings 
 left join Things on Things.idThing=SoldThings.idThing
 left join Categories on Categories.idCateg=Things.idCateg
 order by NameCateg
