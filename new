@@ -58,7 +58,7 @@ INSERT INTO SoldThings(id, idSeller, dataSell, HM_SellThings, Cost1ye, idThing) 
 select DISTINCT NameCateg, SUM(HM_SellThings) over(partition by NameCateg) as QSell, 
 SUM(Cost1ye) over(partition by NameCateg) as ASumSThing from Categories, SoldThings, Things 
 where Things.idThing = SoldThings.idThing  and Categories.idCateg = Things.idCateg
-ex2:
+ex2(last select):
 select DISTINCT NameThing, NameCateg, SUM(HM_SellThings*Cost1ye) over(partition by NameThing) from SoldThings 
 left join Things on Things.idThing=SoldThings.idThing
 left join Categories on Categories.idCateg=Things.idCateg
@@ -71,5 +71,12 @@ where Sellers.idSeller = SoldThings.idSeller and Things.idCateg = Categories.idC
 select NameCateg from Categories,Things,SoldThings where Categories.idCateg=Things.idCateg and Things.idThing=SoldThings.idThing
 order by SoldThings.Cost1ye * SoldThings.HM_SellThings DESC
 )
-ex2:
+ex2(last select):
+select dataSell, NameSeller, HM_SellThings, Cost1ye, NameThing, NameCateg, DENSE_RANK(NameCateg) over(partition by NameCateg)
+from SoldThings 
+left join Things on Things.idThing=SoldThings.idThing
+left join Sellers on SoldThings.idSeller=Sellers.idSeller
+left join Categories on Categories.idCateg=Things.idCateg
+where DATEDIFF(CURDATE(),dataSell)<=5
+order by NameCateg
 
