@@ -33,13 +33,14 @@ INSERT INTO Categories(idCateg,NameCateg) VALUE (2,'Meat product');
 INSERT INTO Categories(idCateg,NameCateg) VALUE (3,'Сonfectionery');
 INSERT INTO Things(idThing,NameThing,idCateg) VALUE (1,'Milk',1);
 INSERT INTO Things(idThing,NameThing,idCateg) VALUE (2,'Cream',1);
-INSERT INTO Things(idThing,NameThing,idCateg) VALUE (3,'Cheese',1);
-INSERT INTO Things(idThing,NameThing,idCateg) VALUE (4,'Meat',2);
-INSERT INTO Things(idThing,NameThing,idCateg) VALUE (5,'Sausage',2);
-INSERT INTO Things(idThing,NameThing,idCateg) VALUE (6,'chicken thigh',2);
-INSERT INTO Things(idThing,NameThing,idCateg) VALUE (7,'cake',3);
-INSERT INTO Things(idThing,NameThing,idCateg) VALUE (8,'pie',3);
-INSERT INTO Things(idThing,NameThing,idCateg) VALUE (9,'cheesecake',3);
+INSERT INTO Things(idThing,NameThing,idCateg) VALUE (3,'Cream',1);
+INSERT INTO Things(idThing,NameThing,idCateg) VALUE (4,'Cheese',1);
+INSERT INTO Things(idThing,NameThing,idCateg) VALUE (5,'Meat',2);
+INSERT INTO Things(idThing,NameThing,idCateg) VALUE (6,'Sausage',2);
+INSERT INTO Things(idThing,NameThing,idCateg) VALUE (7,'chicken thigh',2);
+INSERT INTO Things(idThing,NameThing,idCateg) VALUE (8,'cake',3);
+INSERT INTO Things(idThing,NameThing,idCateg) VALUE (9,'pie',3);
+INSERT INTO Things(idThing,NameThing,idCateg) VALUE (10,'cheesecake',3);
 INSERT INTO Sellers(idSeller, NameSeller) VALUE (1,'Petrov');
 INSERT INTO Sellers(idSeller, NameSeller) VALUE (2,'Ivanov');
 INSERT INTO Sellers(idSeller, NameSeller) VALUE (3,'Sidorov');
@@ -57,6 +58,12 @@ INSERT INTO SoldThings(id, idSeller, dataSell, HM_SellThings, Cost1ye, idThing) 
 select DISTINCT NameCateg, SUM(HM_SellThings) over(partition by NameCateg) as QSell, 
 SUM(Cost1ye) over(partition by NameCateg) as ASumSThing from Categories, SoldThings, Things 
 where Things.idThing = SoldThings.idThing  and Categories.idCateg = Things.idCateg
+ex2:
+select DISTINCT NameThing, NameCateg, SUM(HM_SellThings*Cost1ye) over(partition by NameThing) from SoldThings 
+left join Things on Things.idThing=SoldThings.idThing
+left join Categories on Categories.idCateg=Things.idCateg
+order by NameCateg
+
 
 --надо выбрать продажи за последние 5 дней которые относятся к топ5 категориям товаров с ФИО продавца + добавить рейтинг продавца по объему продаж
 select NameThing, NameCateg, dataSell, NameSeller from SoldThings, Sellers, Categories, Things
@@ -64,5 +71,5 @@ where Sellers.idSeller = SoldThings.idSeller and Things.idCateg = Categories.idC
 select NameCateg from Categories,Things,SoldThings where Categories.idCateg=Things.idCateg and Things.idThing=SoldThings.idThing
 order by SoldThings.Cost1ye * SoldThings.HM_SellThings DESC
 )
-
+ex2:
 
