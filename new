@@ -74,7 +74,7 @@ order by SoldThings.Cost1ye * SoldThings.HM_SellThings DESC
 )
 
 ex2(last select):
-select  dataSell, ROW_NUMBER() OVER(order by SoldThings.Cost1ye *SoldThings.HM_SellThings DESC) as Num, NameSeller, HM_SellThings, Cost1ye, NameThing, NameCateg, SoldThings.Cost1ye *SoldThings.HM_SellThings as allsold, DATEDIFF(CURDATE(),dataSell) as DifDate
+select  dataSell, NameSeller, HM_SellThings, Cost1ye, NameThing, NameCateg, SoldThings.Cost1ye *SoldThings.HM_SellThings as allsold
 from SoldThings
 left join Things on Things.idThing=SoldThings.idThing
 left join Sellers on SoldThings.idSeller=Sellers.idSeller
