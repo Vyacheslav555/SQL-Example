@@ -74,12 +74,13 @@ order by SoldThings.Cost1ye * SoldThings.HM_SellThings DESC
 )
 
 ex2(last select):
-select  dataSell, NameSeller, HM_SellThings, Cost1ye, NameThing, NameCateg, SoldThings.Cost1ye *SoldThings.HM_SellThings as allsold
-from SoldThings
+select dataSell, NameSeller, HM_SellThings, Cost1ye, NameThing, NameCateg,SoldThings.Cost1ye *SoldThings.HM_SellThings as allsold, DATEDIFF(CURDATE(),dataSell) as DifDate
+from SoldThings 
 left join Things on Things.idThing=SoldThings.idThing
 left join Sellers on SoldThings.idSeller=Sellers.idSeller
 left join Categories on Categories.idCateg=Things.idCateg
-where DATEDIFF(CURDATE(),dataSell)<=5 
+where DATEDIFF(CURDATE(),dataSell)<=5
+group by NameCateg
 order by allsold DESC
 limit 5
 
