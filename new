@@ -82,3 +82,12 @@ left join Categories on Categories.idCateg=Things.idCateg
 where DATEDIFF(CURDATE(),dataSell)<=5
 order by NameCateg
 
+ex3(last):
+select dataSell, ROW_NUMBER() OVER(order by SoldThings.Cost1ye *SoldThings.HM_SellThings DESC) as Num, NameSeller, HM_SellThings, Cost1ye, NameThing, NameCateg,SoldThings.Cost1ye *SoldThings.HM_SellThings as allsold, DATEDIFF(CURDATE(),dataSell) as DifDate
+from SoldThings 
+left join Things on Things.idThing=SoldThings.idThing
+left join Sellers on SoldThings.idSeller=Sellers.idSeller
+left join Categories on Categories.idCateg=Things.idCateg
+where DATEDIFF(CURDAT1E(),dataSell)<=5
+order by allsold DESC
+
